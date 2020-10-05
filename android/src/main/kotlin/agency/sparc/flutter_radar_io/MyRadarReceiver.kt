@@ -24,23 +24,23 @@ import io.radar.sdk.model.RadarUser
 public class MyRadarReceiver: RadarReceiver() {
 
   override fun onEventsReceived(context: Context, events: Array<RadarEvent>, user: RadarUser) {
-    // println("test: " + "an event was received")
+    println("an event was received")
   }
 
   override fun onLocationUpdated(context: Context, location: Location, user: RadarUser) {
-    // println("test: " + "location was updated")
+    println("location was updated")
   }
 
   override fun onClientLocationUpdated(context: Context, location: Location, stopped: Boolean, source: Radar.RadarLocationSource) {
-    // println("test: " + "client location updated")
+    println("client location updated")
   }
 
   override fun onError(context: Context, status: Radar.RadarStatus) {
-    // println("test: " + status)
+    println(status)
   }
 
   override fun onLog(context: Context, message: String) {
-    // println("test: " + message)
+    println(message)
   }
 
 }
