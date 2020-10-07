@@ -13,6 +13,9 @@ typedef void RadarCallBack({
 
 class FlutterRadarIo {
   static const MethodChannel _channel = const MethodChannel('flutter_radar_io');
+  static const EventChannel _eventChannel = const EventChannel("radarStream");
+
+  static Stream<dynamic> _radarStream;
   static RadarCallBack _callBack;
 
   static Future<bool> initialize({
@@ -98,6 +101,11 @@ class FlutterRadarIo {
     final Map<String, dynamic> params = <String, dynamic>{'mode': mode};
     final bool result = await _channel.invokeMethod("start-tracking", params);
     return result;
+  }
+
+  static Stream<dynamic> get radarStream {
+    _radarStream ??= _eventChannel.receiveBroadcastStream();
+    return _radarStream;
   }
 
   static Future<void> _methodCallHandler(MethodCall call) async {

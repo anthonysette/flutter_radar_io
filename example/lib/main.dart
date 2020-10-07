@@ -28,6 +28,16 @@ class _MyAppState extends State<MyApp> {
         ),
         body: ListView(
           children: [
+            StreamBuilder(
+              stream: FlutterRadarIo.radarStream,
+              initialData: "no data",
+              builder: (BuildContext context, AsyncSnapshot snapshot){
+                if(snapshot.hasData){
+                  return Text(snapshot.data.toString());
+                }
+                return Text("NO DATA");
+              },
+            ),
             MaterialButton(
               child: Center(
                 child: Text(
@@ -74,7 +84,7 @@ class _MyAppState extends State<MyApp> {
               ),
               onPressed: () async {
                 bool result =
-                    await FlutterRadarIo.setUserId(uid: 'christian-test');
+                    await FlutterRadarIo.setUserId(uid: 'new-device');
                 print(result);
               },
             ),
