@@ -27,7 +27,7 @@ import agency.sparc.flutter_radar_io.MyRadarReceiver
 
 
 /** FlutterRadarIoPlugin */
-public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler, EventCallback {
+public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler {
   // / The MethodChannel that will the communication between Flutter and native Android
   // /
   // / This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -82,16 +82,11 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
     return mapper.readValue(json, R::class.java)
   }
 
-  override fun updateStream(s: String?) {
-    this.mEventSink?.success(s)
-  }
-
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     this.context = flutterPluginBinding.getApplicationContext()
     channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_radar_io")
     channel.setMethodCallHandler(this)
     eventChannel = EventChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "radarStream")
-//    eventChannel.setStreamHandler(streamHandler)
     eventChannel.setStreamHandler(this)
   }
 
@@ -112,8 +107,6 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
       plugin.setContext(registrar.context())
       channel.setMethodCallHandler(plugin)
       val eventChannel = EventChannel(registrar.messenger(), "radarStream")
-      val streamHandler = MyRadarReceiver()
-//      eventChannel.setStreamHandler(streamHandler)
       eventChannel.setStreamHandler(plugin)
     }
   }
@@ -125,10 +118,12 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
           val publishableKey: String? = call.argument("publishableKey")
           Radar.initialize(this.context, publishableKey)
           Radar.setLogLevel(Radar.RadarLogLevel.DEBUG)
+          mEventSink?.success("initialized")
           result.success(true)
         }
         "set-log-level" -> {
           val level: String? = call.argument("level")
+          mEventSink?.success("log")
           when (level) {
             "debug" -> {
               Radar.setLogLevel(Radar.RadarLogLevel.DEBUG)
@@ -159,6 +154,7 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
         "set-user-id" -> {
           val uid: String? = call.argument("uid")
           Radar.setUserId(uid)
+          mEventSink?.success(uid)
           result.success(true)
         }
         "get-user-id" -> {
@@ -262,8 +258,3 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
     channel.setMethodCallHandler(null)
   }
 }
-
-public interface EventCallback {
-  fun updateStream(s: String?)
-}
-

@@ -7,9 +7,7 @@ import io.radar.sdk.RadarReceiver
 import io.radar.sdk.model.RadarEvent
 import io.radar.sdk.model.RadarUser
 
-public class MyRadarReceiver constructor(listener: EventCallback) : RadarReceiver() {
-
-  private var listener: EventCallback? = listener
+public class MyRadarReceiver : RadarReceiver() {
 
   override fun onEventsReceived(context: Context, events: Array<RadarEvent>, user: RadarUser) {
     println("an event was received")
@@ -17,7 +15,6 @@ public class MyRadarReceiver constructor(listener: EventCallback) : RadarReceive
 
   override fun onLocationUpdated(context: Context, location: Location, user: RadarUser) {
     println("location was updated")
-    listener?.updateStream("works");
   }
 
   override fun onClientLocationUpdated(context: Context, location: Location, stopped: Boolean, source: Radar.RadarLocationSource) {
