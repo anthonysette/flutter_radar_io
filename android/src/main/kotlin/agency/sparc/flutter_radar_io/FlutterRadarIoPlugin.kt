@@ -34,8 +34,6 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
   // / when the Flutter Engine is detached from the Activity
   private lateinit var channel: MethodChannel
   private lateinit var eventChannel: EventChannel
-  private var mEventSink: EventChannel.EventSink? = null
-//  private val streamHandler = EventStreamHandler()
   private var activity: Activity? = null
   private var context: Context? = null
 
@@ -100,6 +98,9 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
   // depending on the user's project. onAttachedToEngine or registerWith must both be defined
   // in the same class.
   companion object {
+
+    internal var mEventSink: EventChannel.EventSink? = null
+
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_radar_io")
@@ -109,6 +110,8 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
       val eventChannel = EventChannel(registrar.messenger(), "radarStream")
       eventChannel.setStreamHandler(plugin)
     }
+
+
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {

@@ -7,7 +7,7 @@ import io.radar.sdk.RadarReceiver
 import io.radar.sdk.model.RadarEvent
 import io.radar.sdk.model.RadarUser
 
-public class MyRadarReceiver : RadarReceiver() {
+class MyRadarReceiver : RadarReceiver() {
 
   override fun onEventsReceived(context: Context, events: Array<RadarEvent>, user: RadarUser) {
     println("an event was received")
@@ -15,10 +15,12 @@ public class MyRadarReceiver : RadarReceiver() {
 
   override fun onLocationUpdated(context: Context, location: Location, user: RadarUser) {
     println("location was updated")
+    FlutterRadarIoPlugin.mEventSink?.success("location works")
   }
 
   override fun onClientLocationUpdated(context: Context, location: Location, stopped: Boolean, source: Radar.RadarLocationSource) {
     println("client location updated")
+//    FlutterRadarIoPlugin.mEventSink?.success("client location works")
   }
 
   override fun onError(context: Context, status: Radar.RadarStatus) {
