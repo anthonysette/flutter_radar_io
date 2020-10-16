@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
+import 'package:flutter_radar_io/models.dart';
+
 typedef void RadarCallBack({
   @required String status,
   Map<dynamic, dynamic> location,
@@ -103,9 +105,10 @@ class FlutterRadarIo {
     return result;
   }
 
-  static Stream<dynamic> get radarStream {
+  static Stream<RadarReceiver> get radarStream {
     _radarStream ??= _eventChannel.receiveBroadcastStream();
-    return _radarStream;
+    return _radarStream
+        .map((event) => RadarReceiver.fromJson(jsonDecode(event)));
   }
 
   static Future<void> _methodCallHandler(MethodCall call) async {
