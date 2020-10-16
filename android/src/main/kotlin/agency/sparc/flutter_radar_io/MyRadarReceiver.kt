@@ -66,7 +66,7 @@ class MyRadarReceiver : RadarReceiver() {
       }
       args.put("events", eventsList)
     }
-    args.put("eventType", EventType.EVENTS_RECEIVED)
+    args.put("eventType", EventType.EVENTS_RECEIVED.toString())
 
     val json: JSONObject = JSONObject(args)
     FlutterRadarIoPlugin.mEventSink?.success(json.toString())
@@ -77,7 +77,7 @@ class MyRadarReceiver : RadarReceiver() {
     var args: HashMap<String, Any> = HashMap<String, Any>()
     args.put("location", location.toMap())
     args.put("user", user.toMap())
-    args.put("eventType", EventType.LOCATION_UPDATED)
+    args.put("eventType", EventType.LOCATION_UPDATED.toString())
 
     val json: JSONObject = JSONObject(args)
     FlutterRadarIoPlugin.mEventSink?.success(json.toString())
@@ -89,7 +89,7 @@ class MyRadarReceiver : RadarReceiver() {
     args.put("location", location.toMap())
     args.put("stopped", stopped)
     args.put("source", source)
-    args.put("eventType", EventType.CLIENT_LOCATION_UPDATED)
+    args.put("eventType", EventType.CLIENT_LOCATION_UPDATED.toString())
 
 
     val json: JSONObject = JSONObject(args)
@@ -99,8 +99,8 @@ class MyRadarReceiver : RadarReceiver() {
   override fun onError(context: Context, status: Radar.RadarStatus) {
     println(status)
     var args: HashMap<String, Any> = HashMap<String, Any>()
-    args.put("status", status)
-    args.put("eventType", EventType.ERROR)
+    args.put("status", status.toString())
+    args.put("eventType", EventType.ERROR.toString())
 
 
     val json: JSONObject = JSONObject(args)
