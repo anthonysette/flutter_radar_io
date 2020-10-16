@@ -27,15 +27,13 @@ import agency.sparc.flutter_radar_io.MyRadarReceiver
 
 
 /** FlutterRadarIoPlugin */
-public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler, EventCallback {
+public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler {
   // / The MethodChannel that will the communication between Flutter and native Android
   // /
   // / This local reference serves to register the plugin with the Flutter Engine and unregister it
   // / when the Flutter Engine is detached from the Activity
   private lateinit var channel: MethodChannel
   private lateinit var eventChannel: EventChannel
-  private var mEventSink: EventChannel.EventSink? = null
-//  private val streamHandler = EventStreamHandler()
   private var activity: Activity? = null
   private var context: Context? = null
 
@@ -82,16 +80,11 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
     return mapper.readValue(json, R::class.java)
   }
 
-  override fun updateStream(s: String?) {
-    this.mEventSink?.success(s)
-  }
-
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     this.context = flutterPluginBinding.getApplicationContext()
     channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_radar_io")
     channel.setMethodCallHandler(this)
     eventChannel = EventChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "radarStream")
-//    eventChannel.setStreamHandler(streamHandler)
     eventChannel.setStreamHandler(this)
   }
 
@@ -105,6 +98,9 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
   // depending on the user's project. onAttachedToEngine or registerWith must both be defined
   // in the same class.
   companion object {
+
+    internal var mEventSink: EventChannel.EventSink? = null
+
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_radar_io")
@@ -112,10 +108,10 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
       plugin.setContext(registrar.context())
       channel.setMethodCallHandler(plugin)
       val eventChannel = EventChannel(registrar.messenger(), "radarStream")
-      val streamHandler = MyRadarReceiver()
-//      eventChannel.setStreamHandler(streamHandler)
       eventChannel.setStreamHandler(plugin)
     }
+
+
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -262,8 +258,3 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
     channel.setMethodCallHandler(null)
   }
 }
-
-public interface EventCallback {
-  fun updateStream(s: String?)
-}
-
