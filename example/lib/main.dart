@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_radar_io/flutter_radar_io.dart';
+import 'package:flutter_radar_io/models.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() {
@@ -19,8 +22,57 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  // final subscription = FlutterRadarIo.radarStream.listen(
+  //   (event) {
+  //     print(event);
+  //   },
+  //   onError: (err) {
+  //     print(err);
+  //   },
+  //   cancelOnError: false,
+  //   onDone: () {
+  //     print("done");
+  //   },
+  // );
+
   @override
   Widget build(BuildContext context) {
+    FlutterRadarIo.radarStream.listen(
+      (event) {
+        print(event.toJson().toString());
+        // print(event.toJson().toString());
+        // Map<String, dynamic> received = jsonDecode(event);
+        // if (received.containsKey("events")) {
+        //   print("an event was received");
+
+        //   List<RadarEvent> radarEvents = [];
+
+        //   for (var e in received["events"]) {
+        //     radarEvents.add(RadarEvent.fromJson(e));
+        //   }
+
+        //   for (RadarEvent e in radarEvents) {
+        //     print("Geofence shit: " + e.location.toJson().toString());
+        //   }
+        // } else if (received.containsKey("user")) {
+        //   print("user data updated");
+        //   RadarEvent radarUser = RadarEvent.fromJson(received['user']);
+        //   print("Radar User: " + radarUser.toJson().toString());
+        // } else if (received.containsKey("location")) {
+        //   print("location received");
+        //   Location radarLocation =
+        //       Location.fromJson(jsonDecode(event)['location']);
+        //   print("Radar Location: " + radarLocation.toJson().toString());
+        // }
+      },
+      onError: (err) {
+        print(err);
+      },
+      cancelOnError: false,
+      onDone: () {
+        print("done");
+      },
+    );
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -28,16 +80,16 @@ class _MyAppState extends State<MyApp> {
         ),
         body: ListView(
           children: [
-            StreamBuilder(
-              stream: FlutterRadarIo.radarStream,
-              initialData: "no data",
-              builder: (BuildContext context, AsyncSnapshot snapshot){
-                if(snapshot.hasData){
-                  return Text(snapshot.data.toString());
-                }
-                return Text("NO DATA");
-              },
-            ),
+            // StreamBuilder(
+            //   stream: FlutterRadarIo.radarStream,
+            //   initialData: "no data",
+            //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+            //     if (snapshot.hasData) {
+            //       return Text(snapshot.data.toString());
+            //     }
+            //     return Text("NO DATA");
+            //   },
+            // ),
             MaterialButton(
               child: Center(
                 child: Text(
@@ -83,8 +135,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               onPressed: () async {
-                bool result =
-                    await FlutterRadarIo.setUserId(uid: 'new-device');
+                bool result = await FlutterRadarIo.setUserId(uid: 'new-device');
                 print(result);
               },
             ),
