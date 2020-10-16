@@ -121,12 +121,10 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
           val publishableKey: String? = call.argument("publishableKey")
           Radar.initialize(this.context, publishableKey)
           Radar.setLogLevel(Radar.RadarLogLevel.DEBUG)
-          mEventSink?.success("initialized")
           result.success(true)
         }
         "set-log-level" -> {
           val level: String? = call.argument("level")
-          mEventSink?.success("log")
           when (level) {
             "debug" -> {
               Radar.setLogLevel(Radar.RadarLogLevel.DEBUG)
@@ -157,7 +155,6 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
         "set-user-id" -> {
           val uid: String? = call.argument("uid")
           Radar.setUserId(uid)
-          mEventSink?.success(uid)
           result.success(true)
         }
         "get-user-id" -> {

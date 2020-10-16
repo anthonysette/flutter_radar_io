@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 
+import 'package:flutter_radar_io/models.dart';
+
 typedef void RadarCallBack({
   @required String status,
   Map<dynamic, dynamic> location,
