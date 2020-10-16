@@ -6,9 +6,87 @@ part of 'models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+RadarReceiver _$RadarReceiverFromJson(Map<String, dynamic> json) {
+  return RadarReceiver(
+    _$enumDecodeNullable(_$EventTypeEnumMap, json['eventType']),
+    (json['events'] as List)
+        ?.map((e) =>
+            e == null ? null : RadarEvent.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    json['location'] == null
+        ? null
+        : Location.fromJson(json['location'] as Map<String, dynamic>),
+    json['user'] == null
+        ? null
+        : RadarUser.fromJson(json['user'] as Map<String, dynamic>),
+    json['stopped'] as bool,
+    _$enumDecodeNullable(_$RadarLocationSourceEnumMap, json['source']),
+  );
+}
+
+Map<String, dynamic> _$RadarReceiverToJson(RadarReceiver instance) =>
+    <String, dynamic>{
+      'eventType': _$EventTypeEnumMap[instance.eventType],
+      'events': instance.events,
+      'location': instance.location,
+      'user': instance.user,
+      'stopped': instance.stopped,
+      'source': _$RadarLocationSourceEnumMap[instance.source],
+    };
+
+T _$enumDecode<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError('A value must be provided. Supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+
+  final value = enumValues.entries
+      .singleWhere((e) => e.value == source, orElse: () => null)
+      ?.key;
+
+  if (value == null && unknownValue == null) {
+    throw ArgumentError('`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+  return value ?? unknownValue;
+}
+
+T _$enumDecodeNullable<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+}
+
+const _$EventTypeEnumMap = {
+  EventType.EVENTS_RECEIVED: 'EVENTS_RECEIVED',
+  EventType.CLIENT_LOCATION_UPDATED: 'CLIENT_LOCATION_UPDATED',
+  EventType.LOCATION_UPDATED: 'LOCATION_UPDATED',
+  EventType.ERROR: 'ERROR',
+};
+
+const _$RadarLocationSourceEnumMap = {
+  RadarLocationSource.BACKGROUND_LOCATION: 'BACKGROUND_LOCATION',
+  RadarLocationSource.FOREGROUND_LOCATION: 'FOREGROUND_LOCATION',
+  RadarLocationSource.GEOFENCE_DWELL: 'GEOFENCE_DWELL',
+  RadarLocationSource.GEOFENCE_ENTER: 'GEOFENCE_ENTER',
+  RadarLocationSource.GEOFENCE_EXIT: 'GEOFENCE_EXIT',
+  RadarLocationSource.MANUAL_LOCATION: 'MANUAL_LOCATION',
+  RadarLocationSource.MOCK_LOCATION: 'MOCK_LOCATION',
+  RadarLocationSource.UNKNOWN: 'UNKNOWN',
+};
+
 RadarUser _$RadarUserFromJson(Map<String, dynamic> json) {
   return RadarUser(
-    json['_id'] as String,
+    json['id'] as String,
     json['userId'] as String,
     json['deviceId'] as String,
     json['description'] as String,
@@ -16,7 +94,11 @@ RadarUser _$RadarUserFromJson(Map<String, dynamic> json) {
     json['location'] == null
         ? null
         : Location.fromJson(json['location'] as Map<String, dynamic>),
-    json['geofences'] as List,
+    (json['geofences'] as List)
+        ?.map((e) => e == null
+            ? null
+            : RadarGeofence.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     json['place'] == null
         ? null
         : RadarPlace.fromJson(json['place'] as Map<String, dynamic>),
@@ -72,49 +154,6 @@ Map<String, dynamic> _$RadarUserToJson(RadarUser instance) => <String, dynamic>{
       'source': _$RadarLocationSourceEnumMap[instance.source],
       'proxy': instance.proxy,
     };
-
-T _$enumDecode<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    throw ArgumentError('A value must be provided. Supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-
-  final value = enumValues.entries
-      .singleWhere((e) => e.value == source, orElse: () => null)
-      ?.key;
-
-  if (value == null && unknownValue == null) {
-    throw ArgumentError('`$source` is not one of the supported values: '
-        '${enumValues.values.join(', ')}');
-  }
-  return value ?? unknownValue;
-}
-
-T _$enumDecodeNullable<T>(
-  Map<T, dynamic> enumValues,
-  dynamic source, {
-  T unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
-}
-
-const _$RadarLocationSourceEnumMap = {
-  RadarLocationSource.BACKGROUND_LOCATION: 'BACKGROUND_LOCATION',
-  RadarLocationSource.FOREGROUND_LOCATION: 'FOREGROUND_LOCATION',
-  RadarLocationSource.GEOFENCE_DWELL: 'GEOFENCE_DWELL',
-  RadarLocationSource.GEOFENCE_ENTER: 'GEOFENCE_ENTER',
-  RadarLocationSource.GEOFENCE_EXIT: 'GEOFENCE_EXIT',
-  RadarLocationSource.MANUAL_LOCATION: 'MANUAL_LOCATION',
-  RadarLocationSource.MOCK_LOCATION: 'MOCK_LOCATION',
-  RadarLocationSource.UNKNOWN: 'UNKNOWN',
-};
 
 RadarEvent _$RadarEventFromJson(Map<String, dynamic> json) {
   return RadarEvent(
@@ -224,32 +263,6 @@ Location _$LocationFromJson(Map<String, dynamic> json) {
   );
 }
 
-RadarGeofence _$RadarGeofenceFromJson(Map<String, dynamic> json) {
-  return RadarGeofence(
-      json['id'] as String,
-      json['description'] as String,
-      json['tag'] as String,
-      json['externalId'] as String,
-      json['metadata'] as Map<String, dynamic>,
-      json['geometry'] == null
-          ? null
-          : json['geometry'].containsKey("center") != null
-              ? RadarCircleGeometry.fromJson(
-                  json['geometry'] as Map<String, dynamic>)
-              : RadarPolygonGeometry.fromJson(
-                  json['geometry'] as Map<String, dynamic>));
-}
-
-Map<String, dynamic> _$RadarGeofenceToJson(RadarGeofence instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'description': instance.description,
-      'tag': instance.tag,
-      'externalId': instance.externalId,
-      'metadata': instance.metadata,
-      'geometry': instance.geometry,
-    };
-
 Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
       'latitude': instance.latitude,
       'longitude': instance.longitude,
@@ -320,6 +333,32 @@ Map<String, dynamic> _$RadarChainToJson(RadarChain instance) =>
       'name': instance.name,
       'ecternalId': instance.ecternalId,
       'metadata': instance.metadata,
+    };
+
+RadarGeofence _$RadarGeofenceFromJson(Map<String, dynamic> json) {
+  return RadarGeofence(
+      json['id'] as String,
+      json['description'] as String,
+      json['tag'] as String,
+      json['externalId'] as String,
+      json['metadata'] as Map<String, dynamic>,
+      json['geometry'] == null
+          ? null
+          : json['geometry'].containsKey("center") != null
+              ? RadarCircleGeometry.fromJson(
+                  json['geometry'] as Map<String, dynamic>)
+              : RadarPolygonGeometry.fromJson(
+                  json['geometry'] as Map<String, dynamic>));
+}
+
+Map<String, dynamic> _$RadarGeofenceToJson(RadarGeofence instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'description': instance.description,
+      'tag': instance.tag,
+      'externalId': instance.externalId,
+      'metadata': instance.metadata,
+      'geometry': instance.geometry,
     };
 
 RadarCircleGeometry _$RadarCircleGeometryFromJson(Map<String, dynamic> json) {

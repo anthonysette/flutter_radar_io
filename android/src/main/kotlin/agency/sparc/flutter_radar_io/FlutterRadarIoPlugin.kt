@@ -100,6 +100,10 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
   companion object {
 
     internal var mEventSink: EventChannel.EventSink? = null
+//    internal var radarEventReceived: EventChannel.EventSink? = null
+//    internal var radarClientLocationUpdated: EventChannel.EventSink? = null
+//    internal var radarLocationUpdated: EventChannel.EventSink? = null
+//    internal var radarError: EventChannel.EventSink? = null
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {

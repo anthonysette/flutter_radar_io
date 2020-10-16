@@ -105,9 +105,9 @@ class FlutterRadarIo {
     return result;
   }
 
-  static Stream<dynamic> get radarStream {
+  static Stream<Location> get radarStream {
     _radarStream ??= _eventChannel.receiveBroadcastStream();
-    return _radarStream;
+    return _radarStream.map((event) => Location.fromJson(jsonDecode(event)));
   }
 
   static Future<void> _methodCallHandler(MethodCall call) async {

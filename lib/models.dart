@@ -2,31 +2,20 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'models.g.dart';
 
-class EventsReceived {
-  EventsReceived(
+@JsonSerializable()
+class RadarReceiver {
+  RadarReceiver(
+    this.eventType,
     this.events,
-    this.user,
-  );
-  List<RadarEvent> events;
-  RadarUser user;
-}
-
-class LocationUpdated {
-  LocationUpdated(
     this.location,
     this.user,
-  );
-  Location location;
-  RadarUser user;
-}
-
-class ClientLocationUpdated {
-  ClientLocationUpdated(
-    this.location,
     this.stopped,
     this.source,
   );
+  EventType eventType;
+  List<RadarEvent> events;
   Location location;
+  RadarUser user;
   bool stopped;
   RadarLocationSource source;
 }
@@ -220,7 +209,6 @@ class RadarChain {
   Map<String, dynamic> toJson() => _$RadarChainToJson(this);
 }
 
-@JsonSerializable()
 class RadarGeofence {
   RadarGeofence(
     this.id,
@@ -333,4 +321,11 @@ enum RadarLocationSource {
   MANUAL_LOCATION,
   MOCK_LOCATION,
   UNKNOWN,
+}
+
+enum EventType {
+  EVENTS_RECEIVED,
+  CLIENT_LOCATION_UPDATED,
+  LOCATION_UPDATED,
+  ERROR,
 }
