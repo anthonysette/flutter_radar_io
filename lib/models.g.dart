@@ -21,6 +21,7 @@ RadarReceiver _$RadarReceiverFromJson(Map<String, dynamic> json) {
         : RadarUser.fromJson(json['user'] as Map<String, dynamic>),
     json['stopped'] as bool,
     _$enumDecodeNullable(_$RadarLocationSourceEnumMap, json['source']),
+    _$enumDecodeNullable(_$RadarStatusEnumMap, json['status']),
   );
 }
 
@@ -32,6 +33,7 @@ Map<String, dynamic> _$RadarReceiverToJson(RadarReceiver instance) =>
       'user': instance.user,
       'stopped': instance.stopped,
       'source': _$RadarLocationSourceEnumMap[instance.source],
+      'status': _$RadarStatusEnumMap[instance.status],
     };
 
 T _$enumDecode<T>(
@@ -82,6 +84,22 @@ const _$RadarLocationSourceEnumMap = {
   RadarLocationSource.MANUAL_LOCATION: 'MANUAL_LOCATION',
   RadarLocationSource.MOCK_LOCATION: 'MOCK_LOCATION',
   RadarLocationSource.UNKNOWN: 'UNKNOWN',
+};
+
+const _$RadarStatusEnumMap = {
+  RadarStatus.ERROR_BAD_REQUEST: 'ERROR_BAD_REQUEST',
+  RadarStatus.ERROR_FORBIDDEN: 'ERROR_FORBIDDEN',
+  RadarStatus.ERROR_LOCATION: 'ERROR_LOCATION',
+  RadarStatus.ERROR_NETWORK: 'ERROR_NETWORK',
+  RadarStatus.ERROR_NOT_FOUND: 'ERROR_NOT_FOUND',
+  RadarStatus.ERROR_PAYMENT_REQUIRED: 'ERROR_PAYMENT_REQUIRED',
+  RadarStatus.ERROR_PERMISSIONS: 'ERROR_PERMISSIONS',
+  RadarStatus.ERROR_PUBLISHABLE_KEY: 'ERROR_PUBLISHABLE_KEY',
+  RadarStatus.ERROR_RATE_LIMIT: 'ERROR_RATE_LIMIT',
+  RadarStatus.ERROR_SERVER: 'ERROR_SERVER',
+  RadarStatus.ERROR_UNAUTHORIZED: 'ERROR_UNAUTHORIZED',
+  RadarStatus.ERROR_UNKNOWN: 'ERROR_UNKNOWN',
+  RadarStatus.SUCCESS: 'SUCCESS',
 };
 
 RadarUser _$RadarUserFromJson(Map<String, dynamic> json) {

@@ -11,6 +11,7 @@ class RadarReceiver {
     this.user,
     this.stopped,
     this.source,
+    this.status,
   );
   EventType eventType;
   List<RadarEvent> events;
@@ -18,6 +19,11 @@ class RadarReceiver {
   RadarUser user;
   bool stopped;
   RadarLocationSource source;
+  RadarStatus status;
+
+  factory RadarReceiver.fromJson(Map<String, dynamic> json) =>
+      _$RadarReceiverFromJson(json);
+  Map<String, dynamic> toJson() => _$RadarReceiverToJson(this);
 }
 
 @JsonSerializable()
@@ -321,6 +327,22 @@ enum RadarLocationSource {
   MANUAL_LOCATION,
   MOCK_LOCATION,
   UNKNOWN,
+}
+
+enum RadarStatus {
+  ERROR_BAD_REQUEST,
+  ERROR_FORBIDDEN,
+  ERROR_LOCATION,
+  ERROR_NETWORK,
+  ERROR_NOT_FOUND,
+  ERROR_PAYMENT_REQUIRED,
+  ERROR_PERMISSIONS,
+  ERROR_PUBLISHABLE_KEY,
+  ERROR_RATE_LIMIT,
+  ERROR_SERVER,
+  ERROR_UNAUTHORIZED,
+  ERROR_UNKNOWN,
+  SUCCESS,
 }
 
 enum EventType {

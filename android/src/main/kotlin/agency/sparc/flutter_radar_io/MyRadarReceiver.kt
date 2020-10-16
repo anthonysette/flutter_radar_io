@@ -37,15 +37,22 @@ class MyRadarReceiver : RadarReceiver() {
     return mapper.readValue(json, R::class.java)
   }
 
-  fun createLocation(l: Location): HashMap<String, Any> {
-    val loc: HashMap<String, Any> = HashMap()
-    loc.put("latitude", l.getLatitude())
-    loc.put("longitude", l.getLongitude())
-    loc.put("accuracy", l.getAccuracy())
-    loc.put("altitude", l.getAltitude())
-    loc.put("speed", l.getSpeed())
-    loc.put("time", l.getTime())
-    return loc
+//  fun createLocation(l: Location): HashMap<String, Any> {
+//    val loc: HashMap<String, Any> = HashMap()
+//    loc.put("latitude", l.getLatitude())
+//    loc.put("longitude", l.getLongitude())
+//    loc.put("accuracy", l.getAccuracy())
+//    loc.put("altitude", l.getAltitude())
+//    loc.put("speed", l.getSpeed())
+//    loc.put("time", l.getTime())
+//    return loc
+//  }
+
+  enum class EventType {
+    EVENTS_RECEIVED,
+    CLIENT_LOCATION_UPDATED,
+    LOCATION_UPDATED,
+    ERROR,
   }
 
   override fun onEventsReceived(context: Context, events: Array<RadarEvent>, user: RadarUser) {
@@ -59,30 +66,45 @@ class MyRadarReceiver : RadarReceiver() {
       }
       args.put("events", eventsList)
     }
+    args.put("eventType", EventType.EVENTS_RECEIVED)
+
     val json: JSONObject = JSONObject(args)
-//    FlutterRadarIoPlugin.mEventSink?.success(json.toString())
+    FlutterRadarIoPlugin.mEventSink?.success(json.toString())
   }
 
   override fun onLocationUpdated(context: Context, location: Location, user: RadarUser) {
     println("location was updated")
-//    var args: HashMap<String, Any> = HashMap<String, Any>()
-    val l = createLocation(location)
-//    args.put("location", l)
-    val json: JSONObject = JSONObject(l)
+    var args: HashMap<String, Any> = HashMap<String, Any>()
+    args.put("location", location.toMap())
+    args.put("user", user.toMap())
+    args.put("eventType", EventType.LOCATION_UPDATED)
+
+    val json: JSONObject = JSONObject(args)
     FlutterRadarIoPlugin.mEventSink?.success(json.toString())
   }
 
   override fun onClientLocationUpdated(context: Context, location: Location, stopped: Boolean, source: Radar.RadarLocationSource) {
     println("client location updated")
     var args: HashMap<String, Any> = HashMap<String, Any>()
-    val l = createLocation(location)
-    args.put("location", l)
+    args.put("location", location.toMap())
+    args.put("stopped", stopped)
+    args.put("source", source)
+    args.put("eventType", EventType.CLIENT_LOCATION_UPDATED)
+
+
     val json: JSONObject = JSONObject(args)
-//    FlutterRadarIoPlugin.mEventSink?.success("client location works")
+    FlutterRadarIoPlugin.mEventSink?.success(json.toString())
   }
 
   override fun onError(context: Context, status: Radar.RadarStatus) {
     println(status)
+    var args: HashMap<String, Any> = HashMap<String, Any>()
+    args.put("status", status)
+    args.put("eventType", EventType.ERROR)
+
+
+    val json: JSONObject = JSONObject(args)
+    FlutterRadarIoPlugin.mEventSink?.success(json.toString())
   }
 
   override fun onLog(context: Context, message: String) {
