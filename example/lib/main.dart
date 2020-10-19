@@ -36,30 +36,6 @@ class _MyAppState extends State<MyApp> {
     FlutterRadarIo.radarStream.listen(
       (event) {
         print(event.toJson().toString());
-        // print(event.toJson().toString());
-        // Map<String, dynamic> received = jsonDecode(event);
-        // if (received.containsKey("events")) {
-        //   print("an event was received");
-
-        //   List<RadarEvent> radarEvents = [];
-
-        //   for (var e in received["events"]) {
-        //     radarEvents.add(RadarEvent.fromJson(e));
-        //   }
-
-        //   for (RadarEvent e in radarEvents) {
-        //     print("Geofence shit: " + e.location.toJson().toString());
-        //   }
-        // } else if (received.containsKey("user")) {
-        //   print("user data updated");
-        //   RadarEvent radarUser = RadarEvent.fromJson(received['user']);
-        //   print("Radar User: " + radarUser.toJson().toString());
-        // } else if (received.containsKey("location")) {
-        //   print("location received");
-        //   Location radarLocation =
-        //       Location.fromJson(jsonDecode(event)['location']);
-        //   print("Radar Location: " + radarLocation.toJson().toString());
-        // }
       },
       onError: (err) {
         print(err);
