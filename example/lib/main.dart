@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_radar_io/flutter_radar_io.dart';
+import 'package:flutter_radar_io/models.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() {
@@ -35,6 +36,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     FlutterRadarIo.radarStream.listen(
       (event) {
+        if (event.eventType == EventType.EVENTS_RECEIVED) {
+          print(event.events[0].geofence.toJson());
+        }
         print(event.toJson().toString());
       },
       onError: (err) {
@@ -52,16 +56,6 @@ class _MyAppState extends State<MyApp> {
         ),
         body: ListView(
           children: [
-            // StreamBuilder(
-            //   stream: FlutterRadarIo.radarStream,
-            //   initialData: "no data",
-            //   builder: (BuildContext context, AsyncSnapshot snapshot) {
-            //     if (snapshot.hasData) {
-            //       return Text(snapshot.data.toString());
-            //     }
-            //     return Text("NO DATA");
-            //   },
-            // ),
             MaterialButton(
               child: Center(
                 child: Text(
@@ -205,8 +199,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               onPressed: () async {
-                bool test =
-                    await FlutterRadarIo.startTracking(mode: "continuous");
+                bool test = await FlutterRadarIo.startTracking(mode: "custom");
                 print(test);
               },
             ),
