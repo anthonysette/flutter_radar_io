@@ -37,17 +37,6 @@ class MyRadarReceiver : RadarReceiver() {
     return mapper.readValue(json, R::class.java)
   }
 
-//  fun createLocation(l: Location): HashMap<String, Any> {
-//    val loc: HashMap<String, Any> = HashMap()
-//    loc.put("latitude", l.getLatitude())
-//    loc.put("longitude", l.getLongitude())
-//    loc.put("accuracy", l.getAccuracy())
-//    loc.put("altitude", l.getAltitude())
-//    loc.put("speed", l.getSpeed())
-//    loc.put("time", l.getTime())
-//    return loc
-//  }
-
   enum class EventType {
     EVENTS_RECEIVED,
     CLIENT_LOCATION_UPDATED,
