@@ -104,7 +104,7 @@ const _$RadarStatusEnumMap = {
 
 RadarUser _$RadarUserFromJson(Map<String, dynamic> json) {
   return RadarUser(
-    json['id'] as String,
+    json['_id'] as String,
     json['userId'] as String,
     json['deviceId'] as String,
     json['description'] as String,
@@ -175,7 +175,7 @@ Map<String, dynamic> _$RadarUserToJson(RadarUser instance) => <String, dynamic>{
 
 RadarEvent _$RadarEventFromJson(Map<String, dynamic> json) {
   return RadarEvent(
-    json['id'] as String,
+    json['_id'] as String,
     (json['createdAt'] as num)?.toDouble(),
     (json['actualCreatedAt'] as num)?.toDouble(),
     json['live'] as bool,
@@ -292,7 +292,7 @@ Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
 
 RadarRegion _$RadarRegionFromJson(Map<String, dynamic> json) {
   return RadarRegion(
-    json['id'] as String,
+    json['_id'] as String,
     json['name'] as String,
     json['code'] as String,
     json['type'] as String,
@@ -311,7 +311,7 @@ Map<String, dynamic> _$RadarRegionToJson(RadarRegion instance) =>
 
 RadarPlace _$RadarPlaceFromJson(Map<String, dynamic> json) {
   return RadarPlace(
-    json['id'] as String,
+    json['_id'] as String,
     json['name'] as String,
     (json['categories'] as List)?.map((e) => e as String)?.toList(),
     json['chain'] == null
@@ -355,7 +355,7 @@ Map<String, dynamic> _$RadarChainToJson(RadarChain instance) =>
 
 RadarGeofence _$RadarGeofenceFromJson(Map<String, dynamic> json) {
   return RadarGeofence(
-      json['id'] as String,
+      json['_id'] as String,
       json['description'] as String,
       json['tag'] as String,
       json['externalId'] as String,

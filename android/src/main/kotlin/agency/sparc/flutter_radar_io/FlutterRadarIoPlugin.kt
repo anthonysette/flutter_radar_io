@@ -9,9 +9,9 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
@@ -23,9 +23,6 @@ import java.util.HashMap
 import java.util.Map
 import org.json.JSONObject
 
-import agency.sparc.flutter_radar_io.MyRadarReceiver
-
-
 /** FlutterRadarIoPlugin */
 public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler {
   // / The MethodChannel that will the communication between Flutter and native Android
@@ -36,7 +33,6 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
   private lateinit var eventChannel: EventChannel
   private var activity: Activity? = null
   private var context: Context? = null
-
 
   val mapper = jacksonObjectMapper()
 
@@ -110,8 +106,6 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
       val eventChannel = EventChannel(registrar.messenger(), "radarStream")
       eventChannel.setStreamHandler(plugin)
     }
-
-
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -222,6 +216,29 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
               Radar.startTracking(RadarTrackingOptions.CONTINUOUS)
               result.success(true)
             }
+            "custom" -> {
+              val trackingOptions: RadarTrackingOptions = RadarTrackingOptions(
+                15, // desiredStoppedUpdateInterval
+                15, // fastestStoppedUpdateInterval
+                5, // desiredMovingUpdateInterval
+                5, // fastestMovingUpdateInterval
+                20, // desiredSyncInterval
+                RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy.MEDIUM, // desiredAccuracy
+                0, // stopDuration
+                0, // stopDistance
+                null, // startTrackingAfter
+                null, // stopTrackingAfter
+                RadarTrackingOptions.RadarTrackingOptionsReplay.STOPS, // replay
+                RadarTrackingOptions.RadarTrackingOptionsSync.STOPS_AND_EXITS, // sync
+                false, // useStoppedGeofence
+                0, // stoppedGeofenceRadius
+                false, // useMovingGeofence
+                0, // movingGeofenceRadius
+                true // sync geofence from server to client
+              )
+              Radar.startTracking(trackingOptions)
+              result.success(true)
+            }
             else -> {
               result.success(false)
             }
@@ -246,11 +263,11 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
   }
 
   override fun onListen(o: Any?, eventSink: EventChannel.EventSink) {
-    mEventSink = eventSink;
+    mEventSink = eventSink
   }
 
   override fun onCancel(o: Any?) {
-    mEventSink = null;
+    mEventSink = null
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
