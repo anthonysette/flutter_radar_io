@@ -19,19 +19,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  // final subscription = FlutterRadarIo.radarStream.listen(
-  //   (event) {
-  //     print(event);
-  //   },
-  //   onError: (err) {
-  //     print(err);
-  //   },
-  //   cancelOnError: false,
-  //   onDone: () {
-  //     print("done");
-  //   },
-  // );
-
   @override
   Widget build(BuildContext context) {
     FlutterRadarIo.radarStream.listen(
