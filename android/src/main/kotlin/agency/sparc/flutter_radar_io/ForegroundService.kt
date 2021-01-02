@@ -21,16 +21,16 @@ class ForegroundService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         createNotificationChannel()
         val notificationIntent = Intent()
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, 0)
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Foreground Service")
-                .setContentText("input")
-                .setContentIntent(pendingIntent)
-                .build()
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
+        val notification =
+                NotificationCompat.Builder(this, CHANNEL_ID)
+                        .setContentTitle("Foreground Service")
+                        .setContentText("input")
+                        .setContentIntent(pendingIntent)
+                        .build()
         startForeground(1, notification)
-        //do heavy work on a background thread
-        //stopSelf();
+        // do heavy work on a background thread
+        // stopSelf();
         return START_NOT_STICKY
     }
 
@@ -46,11 +46,11 @@ class ForegroundService : Service() {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val serviceChannel = NotificationChannel(
-                    CHANNEL_ID,
-                    "Foreground Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            )
+            val serviceChannel =
+                    NotificationChannel(
+                            CHANNEL_ID,
+                            "Foreground Service Channel",
+                            NotificationManager.IMPORTANCE_DEFAULT)
             val manager: NotificationManager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(serviceChannel)
         }
