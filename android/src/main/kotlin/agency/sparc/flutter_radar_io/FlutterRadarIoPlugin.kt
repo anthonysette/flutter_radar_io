@@ -218,17 +218,17 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
             }
             "custom" -> {
               val trackingOptions: RadarTrackingOptions = RadarTrackingOptions(
-                15, // desiredStoppedUpdateInterval
-                15, // fastestStoppedUpdateInterval
-                5, // desiredMovingUpdateInterval
-                5, // fastestMovingUpdateInterval
-                20, // desiredSyncInterval
+                5, // desiredStoppedUpdateInterval
+                5, // fastestStoppedUpdateInterval
+                2, // desiredMovingUpdateInterval
+                2, // fastestMovingUpdateInterval
+                10, // desiredSyncInterval
                 RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy.MEDIUM, // desiredAccuracy
-                0, // stopDuration
-                0, // stopDistance
+                1, // stopDuration
+                50, // stopDistance
                 null, // startTrackingAfter
                 null, // stopTrackingAfter
-                RadarTrackingOptions.RadarTrackingOptionsReplay.STOPS, // replay
+                RadarTrackingOptions.RadarTrackingOptionsReplay.NONE, // replay
                 RadarTrackingOptions.RadarTrackingOptionsSync.STOPS_AND_EXITS, // sync
                 false, // useStoppedGeofence
                 0, // stoppedGeofenceRadius
