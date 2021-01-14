@@ -14,7 +14,6 @@
         </receiver>
 
         <service
-            android:name="ForegroundService"
-            android:foregroundServiceType="location" />
+            android:name="ForegroundService"/>
     </application>
 </manifest>
