@@ -24,7 +24,8 @@ import java.util.Map
 import org.json.JSONObject
 
 /** FlutterRadarIoPlugin */
-public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler {
+public class FlutterRadarIoPlugin :
+    FlutterPlugin, MethodCallHandler, ActivityAware, EventChannel.StreamHandler {
   // / The MethodChannel that will the communication between Flutter and native Android
   // /
   // / This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -52,7 +53,9 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
     this.activity = null
   }
 
-  override fun onReattachedToActivityForConfigChanges(activityPluginBinding: ActivityPluginBinding) {
+  override fun onReattachedToActivityForConfigChanges(
+      activityPluginBinding: ActivityPluginBinding
+  ) {
     this.activity = activityPluginBinding.getActivity()
   }
 
@@ -76,11 +79,15 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
     return mapper.readValue(json, R::class.java)
   }
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+  override fun onAttachedToEngine(
+      @NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding
+  ) {
     this.context = flutterPluginBinding.getApplicationContext()
-    channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_radar_io")
+    channel =
+        MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "flutter_radar_io")
     channel.setMethodCallHandler(this)
-    eventChannel = EventChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "radarStream")
+    eventChannel =
+        EventChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "radarStream")
     eventChannel.setStreamHandler(this)
   }
 
@@ -178,24 +185,23 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
           Radar.trackOnce { status, location, events, user ->
             try {
               activity!!.runOnUiThread(
-                      object : Runnable {
-                        override fun run() {
-                          var args: HashMap<String, Any> = HashMap<String, Any>()
-                          args.put("status", status.toString())
-                          args.put("location", location.toMap())
-                          if (events != null && events.size > 0) {
-                            val eventsList = ArrayList<Map<String, Any>>()
-                            for (event in events) {
-                              eventsList.add(event.toMap())
-                            }
-                            args.put("events", eventsList)
-                          }
-                          args.put("user", user.toMap())
-                          val json: JSONObject = JSONObject(args)
-                          result.success(json.toString())
+                  object : Runnable {
+                    override fun run() {
+                      var args: HashMap<String, Any> = HashMap<String, Any>()
+                      args.put("status", status.toString())
+                      args.put("location", location.toMap())
+                      if (events != null && events.size > 0) {
+                        val eventsList = ArrayList<Map<String, Any>>()
+                        for (event in events) {
+                          eventsList.add(event.toMap())
                         }
+                        args.put("events", eventsList)
                       }
-              )
+                      args.put("user", user.toMap())
+                      val json: JSONObject = JSONObject(args)
+                      result.success(json.toString())
+                    }
+                  })
             } catch (e: Exception) {
               println(e)
             }
@@ -217,25 +223,27 @@ public class FlutterRadarIoPlugin : FlutterPlugin, MethodCallHandler, ActivityAw
               result.success(true)
             }
             "custom" -> {
-              val trackingOptions: RadarTrackingOptions = RadarTrackingOptions(
-                5, // desiredStoppedUpdateInterval
-                5, // fastestStoppedUpdateInterval
-                2, // desiredMovingUpdateInterval
-                2, // fastestMovingUpdateInterval
-                10, // desiredSyncInterval
-                RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy.MEDIUM, // desiredAccuracy
-                1, // stopDuration
-                50, // stopDistance
-                null, // startTrackingAfter
-                null, // stopTrackingAfter
-                RadarTrackingOptions.RadarTrackingOptionsReplay.NONE, // replay
-                RadarTrackingOptions.RadarTrackingOptionsSync.STOPS_AND_EXITS, // sync
-                false, // useStoppedGeofence
-                0, // stoppedGeofenceRadius
-                false, // useMovingGeofence
-                0, // movingGeofenceRadius
-                true // sync geofence from server to client
-              )
+              val trackingOptions: RadarTrackingOptions =
+                  RadarTrackingOptions(
+                      5, // desiredStoppedUpdateInterval
+                      5, // fastestStoppedUpdateInterval
+                      2, // desiredMovingUpdateInterval
+                      2, // fastestMovingUpdateInterval
+                      10, // desiredSyncInterval
+                      RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy
+                          .HIGH, // desiredAccuracy
+                      1, // stopDuration
+                      50, // stopDistance
+                      null, // startTrackingAfter
+                      null, // stopTrackingAfter
+                      RadarTrackingOptions.RadarTrackingOptionsReplay.NONE, // replay
+                      RadarTrackingOptions.RadarTrackingOptionsSync.STOPS_AND_EXITS, // sync
+                      false, // useStoppedGeofence
+                      0, // stoppedGeofenceRadius
+                      false, // useMovingGeofence
+                      0, // movingGeofenceRadius
+                      true // sync geofence from server to client
+                      )
               Radar.startTracking(trackingOptions)
               result.success(true)
             }
