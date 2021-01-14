@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               onPressed: () async {
-                bool result = await FlutterRadarIo.setUserId(uid: 'new-device');
+                bool result = await FlutterRadarIo.setUserId(uid: '1-5-2021');
                 print(result);
               },
             ),
@@ -187,7 +187,7 @@ class _MyAppState extends State<MyApp> {
               ),
               onPressed: () async {
                 bool test =
-                    await FlutterRadarIo.startTracking(mode: "continuous");
+                    await FlutterRadarIo.startTracking(mode: "custom");
                 print(test);
               },
             ),

@@ -15,7 +15,28 @@ class ForegroundService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Radar.startTracking(RadarTrackingOptions.CONTINUOUS)
+        val trackingOptions: RadarTrackingOptions =
+                RadarTrackingOptions(
+                        15, // desiredStoppedUpdateInterval
+                        15, // fastestStoppedUpdateInterval
+                        2, // desiredMovingUpdateInterval
+                        2, // fastestMovingUpdateInterval
+                        2, // desiredSyncInterval
+                        RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy
+                                .HIGH, // desiredAccuracy
+                        1, // stopDuration
+                        50, // stopDistance
+                        null, // startTrackingAfter
+                        null, // stopTrackingAfter
+                        RadarTrackingOptions.RadarTrackingOptionsReplay.NONE, // replay
+                        RadarTrackingOptions.RadarTrackingOptionsSync.STOPS_AND_EXITS, // sync
+                        false, // useStoppedGeofence
+                        0, // stoppedGeofenceRadius
+                        false, // useMovingGeofence
+                        0, // movingGeofenceRadius
+                        true // sync geofence from server to client
+                )
+        Radar.startTracking(trackingOptions)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {

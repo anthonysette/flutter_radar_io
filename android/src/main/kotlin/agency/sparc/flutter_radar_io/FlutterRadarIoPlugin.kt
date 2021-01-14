@@ -222,36 +222,14 @@ public class FlutterRadarIoPlugin :
               result.success(true)
             }
             "continuous" -> {
+              Radar.startTracking(RadarTrackingOptions.CONTINUOUS)
+              result.success(true)
+            }
+            "custom" -> {
               context?.let {
                 val myServiceIntent = Intent(it, ForegroundService::class.java)
                 ContextCompat.startForegroundService(it, myServiceIntent)
               }
-              result.success(true)
-            }
-            "custom" -> {
-              val trackingOptions: RadarTrackingOptions =
-                  RadarTrackingOptions(
-                      15, // desiredStoppedUpdateInterval
-                      15, // fastestStoppedUpdateInterval
-                      5, // desiredMovingUpdateInterval
-                      5, // fastestMovingUpdateInterval
-                      20, // desiredSyncInterval
-                      RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy
-                          .MEDIUM, // desiredAccuracy
-                      0, // stopDuration
-                      0, // stopDistance
-                      null, // startTrackingAfter
-                      null, // stopTrackingAfter
-                      RadarTrackingOptions.RadarTrackingOptionsReplay.NONE, // replay
-                      RadarTrackingOptions.RadarTrackingOptionsSync.STOPS_AND_EXITS, // sync
-                      false, // useStoppedGeofence
-                      0, // stoppedGeofenceRadius
-                      false, // useMovingGeofence
-                      0, // movingGeofenceRadius
-                      true // sync geofence from server to client
-                      )
-              Radar.startTracking(trackingOptions)
-
               result.success(true)
             }
             else -> {
