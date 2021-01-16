@@ -21,7 +21,7 @@ class ForegroundService : Service() {
                         1, // fastestStoppedUpdateInterval
                         1, // desiredMovingUpdateInterval
                         1, // fastestMovingUpdateInterval
-                        2, // desiredSyncInterval
+                        30, // desiredSyncInterval
                         RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy
                                 .HIGH, // desiredAccuracy
                         1, // stopDuration
