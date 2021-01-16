@@ -17,10 +17,10 @@ class ForegroundService : Service() {
         super.onCreate()
         val trackingOptions: RadarTrackingOptions =
                 RadarTrackingOptions(
-                        15, // desiredStoppedUpdateInterval
-                        15, // fastestStoppedUpdateInterval
-                        2, // desiredMovingUpdateInterval
-                        2, // fastestMovingUpdateInterval
+                        1, // desiredStoppedUpdateInterval
+                        1, // fastestStoppedUpdateInterval
+                        1, // desiredMovingUpdateInterval
+                        1, // fastestMovingUpdateInterval
                         2, // desiredSyncInterval
                         RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy
                                 .HIGH, // desiredAccuracy
@@ -35,7 +35,7 @@ class ForegroundService : Service() {
                         false, // useMovingGeofence
                         0, // movingGeofenceRadius
                         true // sync geofence from server to client
-                )
+                        )
         Radar.startTracking(trackingOptions)
     }
 
