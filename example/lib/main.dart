@@ -186,8 +186,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               onPressed: () async {
-                bool test =
-                    await FlutterRadarIo.startTracking(mode: "custom");
+                bool test = await FlutterRadarIo.startTracking(mode: "custom");
                 print(test);
               },
             ),
