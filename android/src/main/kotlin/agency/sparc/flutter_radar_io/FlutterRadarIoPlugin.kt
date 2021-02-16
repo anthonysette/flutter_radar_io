@@ -2,9 +2,7 @@ package agency.sparc.flutter_radar_io
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility
 import com.fasterxml.jackson.annotation.PropertyAccessor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -225,11 +223,33 @@ public class FlutterRadarIoPlugin :
               Radar.startTracking(RadarTrackingOptions.CONTINUOUS)
               result.success(true)
             }
-            "custom" -> {
-              context?.let {
-                val myServiceIntent = Intent(it, ForegroundService::class.java)
-                ContextCompat.startForegroundService(it, myServiceIntent)
-              }
+            "fast" -> {
+              val trackingOptions: RadarTrackingOptions =
+                  RadarTrackingOptions(
+                      60, // desiredStoppedUpdateInterval
+                      60, // fastestStoppedUpdateInterval
+                      2, // desiredMovingUpdateInterval
+                      2, // fastestMovingUpdateInterval
+                      20, // desiredSyncInterval
+                      RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy
+                          .HIGH, // desiredAccuracy
+                      1, // stopDuration
+                      4, // stopDistance
+                      null, // startTrackingAfter
+                      null, // stopTrackingAfter
+                      RadarTrackingOptions.RadarTrackingOptionsReplay.NONE, // replay
+                      RadarTrackingOptions.RadarTrackingOptionsSync.ALL, // sync
+                      false, // useStoppedGeofence
+                      0, // stoppedGeofenceRadius
+                      false, // useMovingGeofence
+                      0, // movingGeofenceRadius
+                      true // sync geofence from server to client
+                      )
+              Radar.startTracking(trackingOptions)
+              // context?.let {
+              //   val myServiceIntent = Intent(it, ForegroundService::class.java)
+              //   ContextCompat.startForegroundService(it, myServiceIntent)
+              // }
               result.success(true)
             }
             else -> {

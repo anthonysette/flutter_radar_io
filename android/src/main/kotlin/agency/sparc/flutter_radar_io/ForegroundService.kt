@@ -17,15 +17,15 @@ class ForegroundService : Service() {
         super.onCreate()
         val trackingOptions: RadarTrackingOptions =
                 RadarTrackingOptions(
-                        30, // desiredStoppedUpdateInterval
-                        5, // fastestStoppedUpdateInterval
-                        30, // desiredMovingUpdateInterval
-                        1, // fastestMovingUpdateInterval
-                        20, // desiredSyncInterval
+                        2, // desiredStoppedUpdateInterval
+                        2, // fastestStoppedUpdateInterval
+                        2, // desiredMovingUpdateInterval
+                        2, // fastestMovingUpdateInterval
+                        300, // desiredSyncInterval
                         RadarTrackingOptions.RadarTrackingOptionsDesiredAccuracy
                                 .HIGH, // desiredAccuracy
-                        140, // stopDuration
-                        70, // stopDistance
+                        1, // stopDuration
+                        4, // stopDistance
                         null, // startTrackingAfter
                         null, // stopTrackingAfter
                         RadarTrackingOptions.RadarTrackingOptionsReplay.NONE, // replay

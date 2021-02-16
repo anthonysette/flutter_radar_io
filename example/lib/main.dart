@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
               onPressed: () async {
                 bool result = await FlutterRadarIo.initialize(
                     publishableKey:
-                        'prj_test_pk_83e44ccd6f6800ba394e2f28c8d96f315eb611ea');
+                        'prj_test_pk_5d8db0b8f7a7400c486a2436fa0e6df48e0f942c');
                 print(result);
               },
             ),
@@ -186,7 +186,8 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               onPressed: () async {
-                bool test = await FlutterRadarIo.startTracking(mode: "custom");
+                bool test =
+                    await FlutterRadarIo.startTracking(mode: "continuous");
                 print(test);
               },
             ),
